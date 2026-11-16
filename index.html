@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Advanced Fever Diagnostic Assistant</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{--bg:#f3f6f9;--card:#fff;--ink:#0d2038;--mute:#58697d;--line:#dbe3ea;--navy:#0b2545;--teal:#0f8b8d;--tealbg:#e3f3f3;--red:#b3261e;--redbg:#fbe9e7;--amb:#9a5b00;--ambbg:#fff3dc;--grn:#1d6b45;--grnbg:#e4f3ea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#09131f;--card:#101e2f;--ink:#e6edf5;--mute:#93a4b8;--line:#223449;--navy:#7fc4c6;--teal:#3cc0c2;--tealbg:#12383d;--red:#ff8a80;--redbg:#3a1815;--amb:#ffc266;--ambbg:#3a2a0f;--grn:#7fd6a5;--grnbg:#10301f}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#09131f;--card:#101e2f;--ink:#e6edf5;--mute:#93a4b8;--line:#223449;--navy:#7fc4c6;--teal:#3cc0c2;--tealbg:#12383d;--red:#ff8a80;--redbg:#3a1815;--amb:#ffc266;--ambbg:#3a2a0f;--grn:#7fd6a5;--grnbg:#10301f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"IBM Plex Serif",Georgia,serif;margin:0;color:var(--navy)}
+header{background:#0b2545;color:#fff;padding:14px 20px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+header h1{color:#fff;font-size:19px}
+header small{color:#a9c4de;display:block;font-family:"IBM Plex Sans",sans-serif;font-size:12.5px}
+.bar{display:flex;gap:8px}
+.layout{display:grid;grid-template-columns:230px 1fr;gap:20px;max-width:1120px;margin:20px auto;padding:0 16px}
+nav{position:sticky;top:12px;align-self:start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px}
+nav button{display:flex;width:100%;gap:10px;align-items:center;text-align:left;background:none;border:0;color:var(--mute);padding:9px 10px;border-radius:6px;font:inherit;cursor:pointer}
+nav button i{font-style:normal;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:11px;flex:none}
+nav button.on{background:var(--tealbg);color:var(--navy);font-weight:600}
+nav button.on i{border-color:var(--teal);background:var(--teal);color:#fff}
+nav button.done i{border-color:var(--teal);color:var(--teal)}
+main{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:16px}
+.card h2{font-size:20px;margin-bottom:4px}
+.lead{color:var(--mute);margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+label.f{display:block;font-weight:500;font-size:13.5px}
+input[type=number],input[type=text],select,textarea{width:100%;margin-top:4px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 18px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer;user-select:none;background:var(--card);font-size:14px}
+.chip input{position:absolute;opacity:0}
+.chip:has(input:checked){background:var(--tealbg);border-color:var(--teal);color:var(--navy);font-weight:600}
+.chip:has(input:focus-visible){outline:2px solid var(--teal)}
+h3{font-size:15px;margin:14px 0 0}
+.btn{background:var(--navy);color:#fff;border:0;border-radius:6px;padding:9px 16px;font:inherit;font-weight:500;cursor:pointer}
+:root[data-theme="dark"] .btn{color:#06222a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#06222a}}
+.btn.alt{background:none;color:var(--navy);border:1px solid var(--line)}
+header .btn.alt{color:#fff;border-color:#4b6a8c;padding:6px 12px;font-size:13px}
+.row{display:flex;justify-content:space-between;gap:10px;margin-top:8px;flex-wrap:wrap}
+.tri{display:flex;gap:4px}
+.tri label{border:1px solid var(--line);padding:3px 10px;border-radius:6px;cursor:pointer;font-size:13px}
+.tri label:has(input:checked){background:var(--tealbg);border-color:var(--teal);font-weight:600}
+.tri input{position:absolute;opacity:0}
+.banner{border-radius:8px;padding:12px 14px;margin-bottom:14px;border:1px solid}
+.b0{background:var(--grnbg);color:var(--grn);border-color:var(--grn)}.b1{background:var(--ambbg);color:var(--amb);border-color:var(--amb)}.b2,.b3{background:var(--redbg);color:var(--red);border-color:var(--red)}
+.banner b{font-size:16px}
+.tag{display:inline-block;font-size:12px;font-weight:600;border-radius:4px;padding:1px 8px}
+.t-high{background:var(--redbg);color:var(--red)}.t-int{background:var(--ambbg);color:var(--amb)}.t-low{background:var(--grnbg);color:var(--grn)}
+details{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0;background:var(--card)}
+summary{cursor:pointer;font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+details p{margin:6px 0;color:var(--ink)}details p span{color:var(--mute)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+.sc{overflow-x:auto}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{color:var(--mute);font-weight:500}
+.note{font-size:13px;color:var(--mute)}
+ul{margin:6px 0;padding-left:20px}
+@media (max-width:760px){.layout{grid-template-columns:1fr}nav{position:static;display:flex;overflow-x:auto}nav button{white-space:nowrap;width:auto}}
+@media print{header,nav,.row,.noprint{display:none!important}.layout{display:block;margin:0}.card{border:0;padding:0}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Advanced Fever Diagnostic Assistant</h1><small>Clinical decision support for clinicians. It does not replace clinical judgement.</small></div>
+  <div class="bar"><button class="btn alt" id="theme">Toggle theme</button><button class="btn alt" id="reset">New patient</button></div>
+</header>
+<div class="layout"><nav id="nav" aria-label="Assessment steps"></nav><main id="main"></main></div>
+<script>
+var STEPS=["Patient and fever","Severity","Symptoms","History and exposure","Examination","Differential","Investigations","Results","Final report"];
+var SYM={"General":[["nightsweats","Night sweats"],["weightloss","Weight loss"],["rigors","Chills and rigors"]],
+"Respiratory":[["cough","Cough"],["sorethroat","Sore throat"],["dyspnea","Breathlessness"],["hemoptysis","Haemoptysis"]],
+"Gastrointestinal":[["abdpain","Abdominal pain"],["diarrhea","Diarrhoea"],["vomiting","Vomiting"],["jaundice","Jaundice"]],
+"Neurological":[["headache","Headache"],["neckstiff","Neck stiffness"],["photophobia","Photophobia"],["seizure","Seizures"]],
+"Musculoskeletal":[["myalgia","Myalgia"],["arthralgia","Arthralgia"],["retro","Retro-orbital pain"],["calf","Calf tenderness"]],
+"Skin and mucosa":[["rash","Maculopapular rash"],["petechiae","Petechiae or purpura"],["eschar","Eschar"],["ulcers","Oral or skin ulcers"]],
+"Urinary":[["dysuria","Dysuria or frequency"],["flank","Flank pain"],["oliguria","Reduced urine output"]],
+"Cardiac, eye, nodes":[["murmur","New murmur"],["conj","Conjunctival suffusion"],["lymph","Lymphadenopathy"]]};
+var HX=[["dm","Diabetes"],["ckd","Chronic kidney disease"],["cld","Chronic liver disease"],["hiv","HIV or immunosuppression"],["malig","Malignancy"],["autoimm","Autoimmune disorder"],["device","Catheter or implanted device"],["surgery","Recent surgery or hospitalisation"],["newdrug","New drug in last 4 weeks"],["priortb","Previous tuberculosis"]];
+var EXP={"Vectors and animals":[["mosq","Mosquito exposure or local dengue or malaria season"],["bush","Field, forest or scrub exposure, mite or tick"],["rodent","Rodent or livestock contact"]],
+"Water and food":[["flood","Floodwater or contaminated water"],["unsafe","Unsafe water or street food"]],
+"Contacts and travel":[["tbc","TB contact"],["similar","Similar illness in family or community"],["travel","Travel to endemic or forest or tribal area"]]};
+var EXAM=[["spleno","Splenomegaly"],["hepato","Hepatomegaly"],["relbrady","Relative bradycardia"],["jointswell","Joint swelling"],["eschar_ex","Eschar on examination"],["murmur_ex","Murmur"],["meningeal","Meningeal signs"],["lymph_ex","Generalised lymphadenopathy"],["pallor","Pallor"]];
+/* diseases: [name, group, weights, tests, dangerous, complications] */
+var DX=[
+["Dengue","A",{mosq:3,myalgia:2,retro:2,rash:1,petechiae:1,headache:1,arthralgia:1,similar:2},["NS1 antigen (days 1-5)","Dengue IgM (from day 5)","Serial haematocrit and platelets"],1,"Plasma leakage, shock, bleeding"],
+["Malaria","A",{rigors:3,mosq:2,travel:2,spleno:2,headache:1,jaundice:1,spleno:2},["Thick and thin smear","Rapid antigen test (repeat if negative and suspicion persists)"],1,"Cerebral malaria, AKI, severe anaemia"],
+["Enteric fever","A",{abdpain:2,diarrhea:1,unsafe:3,relbrady:2,hepato:1,spleno:1,headache:1},["Blood culture before antibiotics","Do not rely on Widal alone"],0,"Intestinal perforation, bleeding"],
+["Scrub typhus and rickettsial","A",{eschar:4,eschar_ex:4,bush:3,headache:1,myalgia:1,rash:1,lymph:1,dyspnea:1},["Scrub typhus IgM ELISA","PCR where available","Search for eschar (axilla, groin, scalp)"],1,"Pneumonitis, meningoencephalitis, MODS"],
+["Leptospirosis","A",{flood:3,rodent:3,conj:3,jaundice:2,oliguria:2,myalgia:1,calf:2},["Leptospira IgM","PCR where available","Renal and liver function"],1,"Weil disease, AKI, pulmonary haemorrhage"],
+["Chikungunya","A",{arthralgia:3,jointswell:3,rash:1,mosq:2,similar:1},["RT-PCR (early phase)","IgM (after about day 5)"],0,"Chronic arthritis"],
+["Influenza or other viral illness","A",{cough:2,sorethroat:2,myalgia:1,similar:3,headache:1},["Respiratory viral PCR or rapid test"],0,"Pneumonia, secondary bacterial infection"],
+["Pneumonia","A",{cough:3,dyspnea:3,rigors:1,hemoptysis:1},["Chest X-ray","Sputum Gram stain and culture","Blood culture"],0,"Respiratory failure, empyema"],
+["Urinary tract infection or pyelonephritis","A",{dysuria:4,flank:3,device:2,rigors:1,dm:1},["Urine routine and culture","Renal ultrasound if no response or obstruction suspected"],0,"Urosepsis, abscess"],
+["Tuberculosis","A",{nightsweats:2,weightloss:2,cough:2,tbc:3,priortb:2,hemoptysis:2,hiv:1},["Chest X-ray","Sputum CBNAAT or NAAT","Imaging or biopsy for extrapulmonary disease"],0,"Disseminated TB, meningitis"],
+["Sepsis from bacterial source","B",{rigors:2,device:2,surgery:2,dm:1,hiv:1,abdpain:1,dysuria:1,cough:1},["Blood cultures x2 before antibiotics","Lactate","Source imaging"],1,"Septic shock, organ dysfunction"],
+["Bacterial meningitis or encephalitis","B",{neckstiff:4,meningeal:4,photophobia:2,headache:1,seizure:2},["Blood culture","Lumbar puncture after safety check","Imaging if focal signs or reduced consciousness"],1,"Herniation, hearing loss, death"],
+["Infective endocarditis","B",{murmur:3,murmur_ex:3,device:2,petechiae:1,rigors:1},["Blood cultures x3 over time","Echocardiography","Apply modified Duke-ISCVID criteria"],1,"Heart failure, embolism"],
+["Intra-abdominal or deep-seated abscess","B",{abdpain:3,surgery:3,rigors:2,jaundice:1,hepato:1},["Abdominal ultrasound","CT abdomen","Blood cultures"],0,"Rupture, sepsis"],
+["Drug fever","C",{newdrug:4,rash:1},["Review temporal link to drugs","Eosinophil count","Response to drug withdrawal"],0,"DRESS if severe"],
+["Lymphoma, leukaemia or malignancy","C",{lymph:3,lymph_ex:3,weightloss:2,nightsweats:2,pallor:1,malig:2},["Blood smear","LDH","Node biopsy or marrow where indicated"],0,"Cytopenias, tumour lysis"],
+["Connective tissue disease, vasculitis or adult-onset Still disease","C",{arthralgia:2,rash:2,jointswell:1,ulcers:2,autoimm:3,lymph:1},["ANA, ANCA, RF","Ferritin and complements","Exclude infection and malignancy first"],0,"Macrophage activation, organ damage"],
+["Thromboembolic disease","C",{calf:3,dyspnea:1,surgery:1},["Compression Doppler","CT pulmonary angiography where indicated"],0,"Pulmonary embolism"]];
+var S={step:0,p:{},v:{},f:{},ex:{},res:{}};
+var $=function(i){return document.getElementById(i)};
+function esc(x){return String(x==null?"":x).replace(/[&<>\"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]})}
+function chip(id,label,store){return '<label class="chip"><input type="checkbox" data-s="'+store+'" data-k="'+id+'"'+(S[store][id]?' checked':'')+'>'+label+'</label>'}
+function num(id,label,ph,unit){return '<label class="f">'+label+'<input type="number" step="any" id="'+id+'" value="'+esc(S.p[id]||"")+'" placeholder="'+(ph||"")+'"></label>'}
+function sel(id,label,opts){return '<label class="f">'+label+'<select id="'+id+'">'+opts.map(function(o){return '<option'+(S.p[id]==o?' selected':'')+'>'+o+'</option>'}).join("")+'</select></label>'}
+function flags(){var p=S.p,f=[],crit=0;
+ if(+p.sbp&&+p.sbp<90){f.push("Systolic BP below 90");crit=1}
+ if(+p.spo2&&+p.spo2<90){f.push("SpO2 below 90%");crit=1}
+ if(p.sens&&p.sens!="Alert"){f.push("Altered sensorium");crit=1}
+ if(+p.spo2&&+p.spo2>=90&&+p.spo2<94)f.push("SpO2 90-93%");
+ if(+p.hr>120)f.push("Heart rate above 120");
+ if(+p.rr>=22)f.push("Respiratory rate 22 or more");
+ if(+p.temp>=40||(p.unit=="°F"&&+p.temp>=104))f.push("Temperature 40 °C or higher");
+ if(S.f.petechiae||p.bleed=="Yes")f.push("Bleeding or petechiae");
+ if(S.f.neckstiff||S.ex.meningeal)f.push("Meningeal signs");
+ if(S.f.oliguria)f.push("Reduced urine output");
+ if(p.hyd=="Severe")f.push("Severe dehydration");
+ if(S.v.hiv)f.push("Immunocompromised host");
+ var lv=crit?3:f.length>=3?2:f.length>=1?1:0;return {list:f,level:lv}}
+var LV=["Stable: outpatient evaluation may be appropriate","Moderate risk: prompt assessment and targeted tests","High risk: urgent hospital assessment","Critical: possible sepsis, shock or organ dysfunction"];
+function banner(){var r=flags();if(!r.list.length&&!S.p.temp)return"";
+ return '<div class="banner b'+r.level+'"><b>'+LV[r.level]+'</b>'+(r.list.length?'<div>Red flags: '+r.list.map(esc).join("; ")+'</div>':'')+(r.level>=2?'<div>Start stabilisation and appropriate empiric treatment now; do not wait for this questionnaire. Take cultures first only if this causes no delay.</div>':'')+'</div>'}
+function dur(){var d=+S.p.days;return !d?"":d<7?"Acute":d<=14?"Subacute":"Prolonged"}
+function all(){return Object.assign({},S.f,S.v,S.ex)}
+function rank(){var a=all(),out=[];
+ DX.forEach(function(d){var sc=0,sup=[],miss=[];
+  Object.keys(d[2]).forEach(function(k){if(a[k]){sc+=d[2][k];sup.push(k)}else miss.push(k)});
+  var days=+S.p.days;
+  if(d[0]=="Enteric fever"&&days>=5)sc+=1;
+  if(d[0]=="Tuberculosis"&&days>14)sc+=2;
+  if(d[0]=="Dengue"&&days>7)sc-=2;
+  if(d[0]=="Malaria"&&S.p.pattern=="Intermittent")sc+=1;
+  if(days>14&&d[1]=="C")sc+=2;
+  var r=S.res[d[0]];if(r=="pos")sc+=7;if(r=="neg")sc-=3;
+  out.push({d:d,sc:sc,sup:sup,miss:miss,r:r})});
+ out.sort(function(a,b){return b.sc-a.sc});return out}
+function prob(x){if(x.r=="pos")return["high","t-high"];return x.sc>=6?["high","t-high"]:x.sc>=3?["intermediate","t-int"]:["low","t-low"]}
+var LBL={};for(var g in SYM)SYM[g].forEach(function(s){LBL[s[0]]=s[1]});HX.forEach(function(s){LBL[s[0]]=s[1]});for(var g in EXP)EXP[g].forEach(function(s){LBL[s[0]]=s[1]});EXAM.forEach(function(s){LBL[s[0]]=s[1]});
+function lab(k){return LBL[k]||k}
+function dxCard(x,open){var p=prob(x),d=x.d,gr={A:"Common infection",B:"Serious infection",C:"Non-infectious"}[d[1]];
+ var arg=S.res[d[0]]=="neg"?"Targeted test negative (early tests can be falsely negative)":((x.sup.length)?"":"No supporting feature entered yet");
+ return '<details'+(open?' open':'')+'><summary>'+esc(d[0])+' <span class="tag '+p[1]+'">'+p[0]+'</span>'+(d[4]?' <span class="tag t-high">exclude urgently</span>':'')+' <span class="note">'+gr+'</span></summary>'+
+ '<p><b>Supporting:</b> '+(x.sup.length?x.sup.map(lab).map(esc).join(", "):'<span>none recorded</span>')+'</p>'+
+ '<p><b>Against or weakening:</b> '+(arg||'<span>no contradicting finding recorded</span>')+'</p>'+
+ '<p><b>Missing information:</b> '+x.miss.slice(0,5).map(lab).map(esc).join(", ")+'</p>'+
+ '<p><b>Complications:</b> '+esc(d[5])+'</p><p><b>Best confirmatory tests:</b> '+d[3].map(esc).join("; ")+'</p></details>'}
+function investigations(){var rk=rank(),top=rk.filter(function(x){return x.sc>=3||(x.d[4]&&x.sc>=2)}).slice(0,6),days=+S.p.days;
+ var s1=["CBC with differential, platelets and peripheral smear","CRP; ESR if prolonged","Blood glucose, renal and liver function, electrolytes","Urine routine and microscopy","Blood culture x2 before antibiotics if systemic illness or high risk"];
+ var s3=[];if(S.f.cough||S.f.dyspnea)s3.push("Chest X-ray");if(S.f.abdpain||S.ex.hepato||S.ex.spleno)s3.push("Abdominal ultrasound");
+ if(S.f.neckstiff||S.ex.meningeal||S.f.seizure)s3.push("Lumbar puncture and CSF after stabilisation, check for raised intracranial pressure and coagulopathy; CT first if focal signs or reduced consciousness");
+ if(S.f.murmur||S.ex.murmur_ex)s3.push("Echocardiography");if(flags().level>=2)s3.push("Lactate, arterial blood gas, ECG");
+ var s4=days>14?["Ferritin, LDH, ANA, RF, ANCA, complements","HIV test with consent and counselling; TB workup","Echocardiography, CT chest and abdomen, PET-CT if available","Marrow or node or tissue biopsy as the picture directs","Review formal FUO criteria and drug history"]:[];
+ return {s1:s1,s2:top,s3:s3,s4:s4}}
+function render(){$("nav").innerHTML=STEPS.map(function(t,i){return '<button class="'+(i==S.step?'on':i<S.step?'done':'')+'" data-go="'+i+'"><i>'+(i<S.step?'✓':i+1)+'</i>'+t+'</button>'}).join("");
+ var h="";var st=S.step;
+ if(st==0)h='<div class="card"><h2>Welcome to the Advanced Fever Diagnostic Assistant</h2><p class="lead">I will guide you through a structured clinical assessment, identify important differential diagnoses, recommend targeted investigations and refine the possibilities as you enter findings. First, let us assess clinical stability and fever characteristics. Any field can be skipped.</p><div class="grid">'+num("age","Age (years)","")+sel("sex","Sex",["","Female","Male"])+num("temp","Maximum temperature","")+sel("unit","Unit",["°C","°F"])+num("days","Fever duration (days)","")+sel("pattern","Pattern",["","Continuous","Intermittent","Remittent","Relapsing","Undulating"])+sel("onset","Onset",["","Sudden","Gradual"])+sel("preg","Pregnancy",["Not applicable","Pregnant","Unknown"])+'</div><p class="note" id="durnote">'+(dur()?'Duration class: '+dur():'')+'</p>'+banner()+'<div class="row"><span></span><button class="btn" data-next>Continue</button></div></div>';
+ if(st==1)h='<div class="card"><h2>Fever severity assessment</h2><p class="lead">Enter bedside vital signs. Red flags are screened before anything else.</p><div class="grid">'+num("sbp","Systolic BP (mmHg)")+num("hr","Pulse (/min)")+num("rr","Respiratory rate (/min)")+num("spo2","SpO2 (%)")+sel("sens","Sensorium",["Alert","Drowsy","Confused","Unresponsive"])+sel("hyd","Hydration",["Normal","Mild","Moderate","Severe"])+sel("bleed","Bleeding manifestations",["No","Yes"])+'</div><div id="ban">'+banner()+'</div><p class="note">Triage band is a transparent rule-based aid, not a validated score. Confirm with your own assessment.</p><div class="row"><button class="btn alt" data-prev>Back</button><button class="btn" data-next>Continue</button></div></div>';
+ if(st==2){h='<div class="card"><h2>Associated symptoms</h2><p class="lead">Select everything present. Leave the rest blank.</p>';for(var g in SYM){h+='<h3>'+g+'</h3><div class="chips">'+SYM[g].map(function(s){return chip(s[0],s[1],"f")}).join("")+'</div>'}h+='<div id="ban">'+banner()+'</div><div class="row"><button class="btn alt" data-prev>Back</button><button class="btn" data-next>Continue</button></div></div>'}
+ if(st==3){h='<div class="card"><h2>Past history and exposures</h2><h3>Comorbidities and exposures to treatment</h3><div class="chips">'+HX.map(function(s){return chip(s[0],s[1],"v")}).join("")+'</div>';for(var g in EXP){h+='<h3>'+g+'</h3><div class="chips">'+EXP[g].map(function(s){return chip(s[0],s[1],"v")}).join("")+'</div>'}h+='<label class="f">Location, occupation, drugs, vaccination (free text)<input type="text" id="notes" value="'+esc(S.p.notes||"")+'"></label><div class="row"><button class="btn alt" data-prev>Back</button><button class="btn" data-next>Continue</button></div></div>'}
+ if(st==4)h='<div class="card"><h2>Examination findings</h2><p class="lead">Mark positive findings only. Remember to look for eschar in skin folds and to check meningeal signs.</p><div class="chips">'+EXAM.map(function(s){return chip(s[0],s[1],"ex")}).join("")+'</div><div id="ban">'+banner()+'</div><div class="row"><button class="btn alt" data-prev>Back</button><button class="btn" data-next>Show differential</button></div></div>';
+ if(st==5){var rk=rank();h='<div class="card"><h2>Differential diagnosis dashboard</h2><p class="lead">Ranked by matched features. Probabilities are qualitative; no validated model is applied. Endemic diseases are ranked only on entered exposure or clinical evidence.</p>'+banner()+rk.slice(0,8).map(function(x,i){return dxCard(x,i<2)}).join("")+'<h3>Dangerous diagnoses to keep in view</h3><ul>'+rk.filter(function(x){return x.d[4]}).map(function(x){return '<li>'+esc(x.d[0])+' ('+prob(x)[0]+')</li>'}).join("")+'</ul><div class="row"><button class="btn alt" data-prev>Back</button><button class="btn" data-next>Recommend investigations</button></div></div>'}
+ if(st==6){var iv=investigations();h='<div class="card"><h2>Investigation recommendations</h2><p class="lead">Stepwise and targeted. Tests are suggested because they discriminate between your current leading diagnoses.</p>'+banner()+
+ '<details open><summary>Stage 1: initial screening <span class="tag t-high">now</span></summary><ul>'+iv.s1.map(function(x){return '<li>'+x+'</li>'}).join("")+'</ul></details>'+
+ '<details open><summary>Stage 2: targeted by suspicion <span class="tag t-int">first-line</span></summary>'+(iv.s2.length?iv.s2.map(function(x){return '<p><b>'+esc(x.d[0])+':</b> '+x.d[3].map(esc).join("; ")+'</p>'}).join(""):'<p>Not enough features entered yet to target tests.</p>')+'<p class="note">Rapid tests have limits: a negative early test does not exclude infection, and an isolated positive serology needs timing and confirmation.</p></details>'+
+ '<details><summary>Stage 3: organ-specific</summary><ul>'+(iv.s3.length?iv.s3.map(function(x){return '<li>'+x+'</li>'}).join(""):'<li>None indicated by current findings.</li>')+'</ul></details>'+
+ '<details><summary>Stage 4: second-line and advanced</summary><ul>'+(iv.s4.length?iv.s4.map(function(x){return '<li>'+x+'</li>'}).join(""):'<li>Reserved for fever beyond 14 days or when the first two stages do not explain the illness.</li>')+'</ul></details>'+
+ '<div class="row"><button class="btn alt" data-prev>Back</button><button class="btn" data-next>Enter results</button></div></div>'}
+ if(st==7){var tp=investigations().s2;h='<div class="card"><h2>Investigation results</h2><p class="lead">Record the key confirmatory result for each leading diagnosis. The ranking updates automatically.</p>'+(tp.length?'<div class="sc"><table><tr><th>Diagnosis</th><th>Key confirmatory test</th><th>Result</th></tr>'+tp.map(function(x){var n=x.d[0];return '<tr><td>'+esc(n)+'</td><td>'+esc(x.d[3][0])+'</td><td><div class="tri">'+[["pos","Positive"],["neg","Negative"],["","Not done"]].map(function(o){return '<label><input type="radio" name="r_'+esc(n)+'" data-res="'+esc(n)+'" value="'+o[0]+'"'+((S.res[n]||"")==o[0]?' checked':'')+'>'+o[1]+'</label>'}).join("")+'</div></td></tr>'}).join("")+'</table></div>':'<p>No leading diagnoses to test yet. Go back and enter more findings.</p>')+'<p class="note">A positive result raises a diagnosis to high; a negative result lowers it but may reflect early testing. Interpret against day of illness and prevalence.</p><h3>Updated reasoning</h3><div class="sc"><table><tr><th>Diagnosis</th><th>Supporting</th><th>Contradicting</th><th>Probability</th></tr>'+rank().slice(0,5).map(function(x){return '<tr><td>'+esc(x.d[0])+'</td><td>'+x.sup.slice(0,4).map(lab).map(esc).join(", ")+(x.r=="pos"?"; test positive":"")+'</td><td>'+(x.r=="neg"?"test negative":"-")+'</td><td>'+prob(x)[0]+'</td></tr>'}).join("")+'</table></div><div class="row"><button class="btn alt" data-prev>Back</button><button class="btn" data-next>Generate report</button></div></div>'}
+ if(st==8){var rk2=rank(),f=flags(),p=S.p,iv=investigations(),top=rk2[0];
+ h='<div class="card"><h2>Final clinical assessment report</h2><p class="note">Generated '+new Date().toLocaleDateString()+'. Clinical decision support only; all recommendations need clinician verification.</p>'+
+ '<div class="banner b'+f.level+'"><b>Impression:</b> '+(top.sc>=3?'Leading consideration is '+esc(top.d[0])+' ('+prob(top)[0]+' probability), a working hypothesis rather than a confirmed diagnosis. ':'No diagnosis stands out on current data. ')+LV[f.level]+'.</div>'+
+ '<h3>Patient and fever</h3><p>Age '+esc(p.age||"not given")+', '+esc(p.sex||"sex not given")+(p.preg=="Pregnant"?', pregnant':'')+'. Fever '+esc(p.temp||"?")+' '+esc(p.unit||"°C")+' for '+esc(p.days||"?")+' days ('+(dur()||"duration unknown")+'), pattern '+esc(p.pattern||"not stated")+'. Vitals: BP '+esc(p.sbp||"?")+', HR '+esc(p.hr||"?")+', RR '+esc(p.rr||"?")+', SpO2 '+esc(p.spo2||"?")+'%.</p>'+
+ '<h3>Red flags</h3><p>'+(f.list.length?f.list.map(esc).join("; "):"None recorded")+'</p>'+
+ '<h3>Findings recorded</h3><p>'+(Object.keys(all()).filter(function(k){return all()[k]}).map(lab).map(esc).join(", ")||"None")+'</p>'+
+ '<h3>Prioritised differential</h3><div class="sc"><table><tr><th>Diagnosis</th><th>Probability</th><th>Next investigation</th></tr>'+rk2.slice(0,6).map(function(x){return '<tr><td>'+esc(x.d[0])+'</td><td>'+prob(x)[0]+'</td><td>'+esc(x.d[3][0])+'</td></tr>'}).join("")+'</table></div>'+
+ '<h3>Dangerous diagnoses still to exclude</h3><ul>'+rk2.filter(function(x){return x.d[4]&&x.r!="neg"}).map(function(x){return '<li>'+esc(x.d[0])+'</li>'}).join("")+'</ul>'+
+ '<h3>Investigations</h3><p><b>Immediate and first-line:</b> '+iv.s1.join("; ")+'.</p><p><b>Targeted:</b> '+(iv.s2.map(function(x){return esc(x.d[3][0])}).join("; ")||"pending more findings")+'.</p>'+(iv.s3.length?'<p><b>Organ-specific:</b> '+iv.s3.join("; ")+'.</p>':'')+(iv.s4.length?'<p><b>Advanced:</b> '+iv.s4.join("; ")+'.</p>':'')+
+ '<h3>Monitoring</h3><p>Reassess vitals, urine output and mental state at least each shift while febrile; repeat negative early tests after the appropriate window; track haematocrit and platelets if dengue remains possible.</p>'+
+ '<h3>Limitations</h3><p>This tool scores entered features with fixed rules. It does not use validated prediction models, local resistance data or imaging. Absence of a finding may only mean it was not entered.</p>'+
+ '<h3>Sources to verify against</h3><ul><li>Surviving Sepsis Campaign international guidelines, 2021</li><li>WHO dengue guidelines for diagnosis, treatment, prevention and control, 2009, and WHO malaria guidelines (living edition)</li><li>NCVBDC and ICMR national guidance for vector-borne and febrile illness</li><li>Duke-ISCVID criteria for infective endocarditis, 2023</li><li>Durack and Street criteria for fever of unknown origin, 1991</li></ul>'+
+ '<div class="row noprint"><button class="btn alt" data-prev>Back</button><button class="btn" id="pdf">Export as PDF</button></div></div>'}
+ $("main").innerHTML=h;window.scrollTo(0,0)}
+document.addEventListener("click",function(e){var t=e.target;
+ if(t.dataset.next!==undefined){S.step=Math.min(8,S.step+1);render()}
+ else if(t.dataset.prev!==undefined){S.step=Math.max(0,S.step-1);render()}
+ else if(t.closest("[data-go]")){S.step=+t.closest("[data-go]").dataset.go;render()}
+ else if(t.id=="pdf")window.print();
+ else if(t.id=="theme"){var d=document.documentElement,c=d.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");d.dataset.theme=c=="dark"?"light":"dark"}
+ else if(t.id=="reset"){if(confirm("Clear all entered data and start a new patient?")){S={step:0,p:{},v:{},f:{},ex:{},res:{}};render()}}});
+document.addEventListener("change",function(e){var t=e.target;
+ if(t.dataset.s){S[t.dataset.s][t.dataset.k]=t.checked;var b=$("ban");if(b)b.innerHTML=banner()}
+ else if(t.dataset.res){S.res[t.dataset.res]=t.value;render()}
+ else if(t.id&&S.step<5&&(t.tagName=="INPUT"||t.tagName=="SELECT")){S.p[t.id]=t.value;var b=$("ban");if(b)b.innerHTML=banner();var n=$("durnote");if(n)n.textContent=dur()?"Duration class: "+dur():""}});
+render();
+</script>
+</body>
+</html>
